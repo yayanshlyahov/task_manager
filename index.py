@@ -1,6 +1,6 @@
 from flask import Flask
 
-from . import settings
+import settings
 
 
 app = Flask(__name__)
