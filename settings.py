@@ -1,4 +1,4 @@
 try:
-    from local import *
+    from local import * # noqa
 except ImportError:
     ...
