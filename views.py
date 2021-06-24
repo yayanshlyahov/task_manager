@@ -1,6 +1,6 @@
 from app import app
 
-from flask import request, jsonify, abort
+from flask import request, jsonify, abort, session
 from flask.helpers import make_response
 from model import get_task, create_task, get_filtered_task
 
@@ -13,8 +13,18 @@ def error_not_found(error):
     )
 
 
+@app.before_request
+def is_user_logged_in():
+    if 'username' in session:
+        print('Authorized')
+    else:
+        print('Unauthorized')
+        abort(403)
+
+
 @app.route('/')
 def index():
+    session['username'] = 'Vasya'
     return 'Hello world'
 
 
