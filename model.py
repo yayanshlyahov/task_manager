@@ -8,7 +8,6 @@ class Task(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship("User", backref=db.backref("user", uselist=False))
 
-
     def __init__(self, name, description, user_id=None):
         self.name = name
         self.description = description

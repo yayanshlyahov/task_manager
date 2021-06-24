@@ -9,10 +9,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///some.db'
 db = SQLAlchemy(app)
 
 
+from views import * # noqa
+
+
 if __name__ == '__main__':
-
-    from views import *
-
     app.run(
         host=settings.HOST,
         port=settings.PORT,
