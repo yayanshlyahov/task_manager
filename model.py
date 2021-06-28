@@ -2,6 +2,8 @@ from app import db
 
 
 class Task(db.Model):
+    __table_args__ = {'extend_existing': True} 
+    
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     description = db.Column(db.String(250))
@@ -39,20 +41,38 @@ def get_task(id=None):
 
 
 class User(db.Model):
+    __table_args__ = {'extend_existing': True} 
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     password = db.Column(db.String(250))
+    yo = db.Column(db.Integer)
+    phone_number = db.Column(db.Integer)
 
-    def __init__(self, name, password):
+    def __init__(self, name, password, yo):
         self.name = name
         self.password = hash(password)
+        self.yo = yo
 
 
-def create_user(new_name, new_password):
-    user = User(new_name, new_password)
+def create_user(new_name, new_password, new_yo):
+    user = User(new_name, new_password, new_yo)
     db.session.add(user)
     db.session.commit()
     return user
+
+
+def get_users():
+    user_list = []
+    for user in User.query.all():
+        current_user = {
+            'id': user.id,
+            'name': user.name,
+            'password': user.password,
+            'yo': user.yo,
+        }
+        user_list.append(current_user)
+    return user_list 
 
 
 def get_filtered_task(kwargs):
@@ -73,6 +93,7 @@ def get_filtered_task(kwargs):
 
 
 if __name__ == "__main__":
+    # db.metadata.clear()
     print("Creating database tables...")
     db.create_all()
     print("Done!")

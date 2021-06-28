@@ -1,0 +1,13 @@
+<!doctype html>
+  <table border = 1 align = center width=90%>
+    <tr>
+    {% for key in result.keys() %}
+       <th> {{ key }} </th>
+    {% endfor %}
+    </tr>
+    <tr>
+    {% for value in result.values() %}
+       <td align=center> {{ value }} </td>
+    {% endfor %}
+    </tr>
+  </table>
