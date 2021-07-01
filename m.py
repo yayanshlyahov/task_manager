@@ -1,20 +1,49 @@
-from typing import Iterable, Optional, Union, Any, List, Tuple, Dict
-
-items: List[ Union[int, str] ] = [1, 2, '123']
-
-cosnt_items: Tuple = (1, 2, '123')
-
-book: Dict[str, str] = {'Orwel': '1984'}
+from pydantic import BaseModel, ValidationError, validator
 
 
-# FM-253: Create example function
-def example(a: Dict[str, str]) -> Optional[int]:
-    
-    return None
+class FIO(BaseModel):
+    first_name: str
+    last_name: str
 
 
-def generator() -> Iterable[int]:
-    yield 1
-    yield 2
+class UserModel(BaseModel):
+    name: FIO
+    username: str
+    password1: str
+    password2: str
 
-assert 1 == 2
+    # @validator('name')
+    # def name_must_contain_space(cls, v):
+    #     if ' ' not in v:
+    #         raise ValueError('must contain a space')
+    #     return v.title()
+
+    @validator('password2')
+    def passwords_match(cls, v, values, **kwargs):
+        if 'password1' in values and v != values['password1']:
+            raise ValueError('passwords do not match')
+        return v
+
+    @validator('username')
+    def username_alphanumeric(cls, v):
+        assert v.isalnum(), 'must be alphanumeric'
+        return v
+
+
+base_json = '''
+{
+    "name": {
+        "first_name": "Yan",
+        "last_name": "Shlyahov"
+    },
+    "username": "yayan",
+    "password1": "1234567890",
+    "password2": "1234567890"
+}
+'''
+
+# import pdb; pdb.set_trace()
+user = UserModel.parse_raw(base_json)
+user.name = "Yan Shlyahov"
+print(user.json())
+import pdb; pdb.set_trace()
